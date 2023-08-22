@@ -5,6 +5,9 @@
 ## Table of Contents
 
 - [IOC & DI](#ioc--di)
+- [Life Cycle](#life-cycle)
+- [Module](#module)
+- [Data Object](#data-object)
 - [License](#license)
 
 ## IOC & DI
@@ -123,6 +126,18 @@ const Factory = <T>(target: Constructor<T>): T => {
 
 Factory(Person).play()
 ```
+
+## Life Cycle
+
+请查阅 [Nestjs Life Cycle](./.instruction/nest-life-cycle.md)
+
+## Module
+
+请查阅 [Nestjs Module](./.instruction/nest-module.md)
+
+## Data Object
+
+请查阅 [Nestjs Data Object](./.instruction/nest-data-object.md)
 
 ## License
 
