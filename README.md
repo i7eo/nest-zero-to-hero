@@ -6,8 +6,9 @@
 
 - [IOC & DI](#ioc--di)
 - [Life Cycle](#life-cycle)
-- [Module](#module)
+- [Core](#core)
 - [Data Object](#data-object)
+- [API Server Design](#api-server-design)
 - [License](#license)
 
 ## IOC & DI
@@ -131,13 +132,17 @@ Factory(Person).play()
 
 请查阅 [Nestjs Life Cycle](./.instruction/nest-life-cycle.md)
 
-## Module
+## Core
 
-请查阅 [Nestjs Module](./.instruction/nest-module.md)
+请查阅 [Nestjs Core](./.instruction/nest-core.md)
 
 ## Data Object
 
 请查阅 [Nestjs Data Object](./.instruction/nest-data-object.md)
+
+## API Server Design
+
+请查阅 [Nestjs API Server Design](./.instruction/nest-api-server-design.md)
 
 ## License
 
