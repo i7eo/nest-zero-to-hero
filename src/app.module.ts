@@ -1,11 +1,16 @@
 import { Module } from '@nestjs/common'
 
-import { ConfigModule } from '@nestjs/config'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm'
 import * as dotenv from 'dotenv'
 import * as joi from 'joi'
 
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
+import { Log } from './log/log.entity'
+import { Role } from './role/role.entity'
+import { Profile } from './user/profile.entity'
+import { User } from './user/user.entity'
 import { UserModule } from './user/user.module'
 
 const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`
@@ -18,11 +23,45 @@ const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`
       load: [() => dotenv.config({ path: '.env' })],
       validationSchema: joi.object({
         NODE_ENV: joi.string().valid('development', 'test', 'production').default('development'),
-        DB_URL: joi.string().domain(),
+        DB_TYPE: joi.string().valid('mysql'),
         DB_HOST: joi.string().ip(),
         DB_PORT: joi.number().default(3306),
+        DB_SYNC: joi.boolean().default(false),
+        DB_URL: joi.string().domain(),
+        DB_DATABASE: joi.string().required(),
+        DB_USERNAME: joi.string().required(),
+        DB_PASSWORD: joi.string().required(),
       }),
     }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (service: ConfigService) =>
+        ({
+          type: service.get('DB_TYPE'),
+          host: service.get('DB_HOST'),
+          port: service.get('DB_PORT'),
+          database: service.get('DB_DATABASE'),
+          username: service.get('DB_USERNAME'),
+          password: service.get('DB_PASSWORD'),
+          /** 同步实体至数据库 */
+          synchronize: service.get('DB_SYNC'),
+          entities: [User, Profile, Log, Role],
+          logging: ['warn', 'error'],
+        }) as TypeOrmModuleOptions,
+    }),
+    // TypeOrmModule.forRoot({
+    //   type: 'mysql',
+    //   host: 'localhost',
+    //   port: 8081,
+    //   username: 'root',
+    //   password: '123456',
+    //   database: 'testdb',
+    //   entities: [],
+    //   /** 同步实体至数据库 */
+    //   synchronize: true,
+    //   logging: ['warn', 'error'],
+    // }),
     UserModule,
   ],
   controllers: [AppController],
