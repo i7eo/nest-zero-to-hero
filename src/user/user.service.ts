@@ -67,13 +67,18 @@ export class UserService {
 
   readLogByGroup(id: number) {
     // SELECT log.result, COUNT(log.result) from log, user WHERE user.id = log.userId AND user.id = 2 GROUP BY log.result
-    return this.LogRepository.createQueryBuilder('log')
-      .select('log.result')
-      .addSelect('COUNT("log.result")')
-      .leftJoinAndSelect('log.user', 'user')
-      .where('user.id = :id', { id })
-      .groupBy('log.result')
-      .getRawMany()
+    return (
+      this.LogRepository.createQueryBuilder('log')
+        .select('log.result', 'result')
+        .addSelect('COUNT("log.result")', 'count')
+        .leftJoinAndSelect('log.user', 'user')
+        .where('user.id = :id', { id })
+        .groupBy('log.result')
+        // .orderBy('result', 'DESC')
+        .orderBy('count', 'DESC')
+        .addOrderBy('result', 'DESC')
+        .getRawMany()
+    )
   }
 
   async readRole(id: number) {
