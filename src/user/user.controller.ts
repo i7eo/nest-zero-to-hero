@@ -44,4 +44,19 @@ export class UserController {
   readList(): any {
     return this.service.readList()
   }
+
+  @Get('profile')
+  readProfile(): any {
+    return this.service.readProfile(2)
+  }
+
+  @Get('log')
+  readLog(): any {
+    return this.service.readLog(2)
+  }
+
+  @Get('role')
+  readRole(): any {
+    return this.service.readRole(2)
+  }
 }

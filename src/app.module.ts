@@ -7,10 +7,12 @@ import * as joi from 'joi'
 
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
-import { Log } from './log/log.entity'
-import { Role } from './role/role.entity'
-import { Profile } from './user/profile.entity'
-import { User } from './user/user.entity'
+// import { Log } from './log/log.entity'
+import { LogModule } from './log/log.module'
+// import { Role } from './role/role.entity'
+import { RoleModule } from './role/role.module'
+// import { Profile } from './user/profile.entity'
+// import { User } from './user/user.entity'
 import { UserModule } from './user/user.module'
 
 const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`
@@ -25,7 +27,8 @@ const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`
         NODE_ENV: joi.string().valid('development', 'test', 'production').default('development'),
         DB_TYPE: joi.string().valid('mysql'),
         DB_HOST: joi.string().ip(),
-        DB_PORT: joi.number().default(3306),
+        // DB_PORT: joi.number().default(3306),
+        DB_PORT: joi.number(),
         DB_SYNC: joi.boolean().default(false),
         DB_URL: joi.string().domain(),
         DB_DATABASE: joi.string().required(),
@@ -46,7 +49,8 @@ const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`
           password: service.get('DB_PASSWORD'),
           /** 同步实体至数据库 */
           synchronize: service.get('DB_SYNC'),
-          entities: [User, Profile, Log, Role],
+          autoLoadEntities: true,
+          // entities: [User, Profile, Log, Role],
           logging: ['warn', 'error'],
         }) as TypeOrmModuleOptions,
     }),
@@ -63,6 +67,8 @@ const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`
     //   logging: ['warn', 'error'],
     // }),
     UserModule,
+    LogModule,
+    RoleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
