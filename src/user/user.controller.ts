@@ -55,6 +55,11 @@ export class UserController {
     return this.service.readLog(2)
   }
 
+  @Get('logs')
+  readLogs(): any {
+    return this.service.readLogByGroup(2)
+  }
+
   @Get('role')
   readRole(): any {
     return this.service.readRole(2)
