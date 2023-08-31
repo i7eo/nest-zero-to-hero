@@ -9,6 +9,8 @@
 - [Core](#core)
 - [Data Object](#data-object)
 - [API Server Design](#api-server-design)
+- [SQL](#sql)
+- [Log Design](#log-design)
 - [License](#license)
 
 ## IOC & DI
@@ -143,6 +145,14 @@ Factory(Person).play()
 ## API Server Design
 
 请查阅 [Nestjs API Server Design](./.instruction/nest-api-server-design.md)
+
+## SQL
+
+请查阅 [Nestjs SQL](./.instruction/nest-sql.md)
+
+## Log Design
+
+请查阅 [Nestjs Log Design](./.instruction/nest-log-design.md)
 
 ## License
 
