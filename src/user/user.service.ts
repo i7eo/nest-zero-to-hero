@@ -10,7 +10,7 @@ import { User } from './user.entity'
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly repository: Repository<User>,
-    @InjectRepository(Log) private readonly LogRepository: Repository<Log>,
+    @InjectRepository(Log) private readonly logRepository: Repository<Log>,
   ) {}
 
   create(user: User) {
@@ -47,7 +47,7 @@ export class UserService {
 
   async readLog(id: number) {
     // const user = await this.repository.findOne({ where: { id } })
-    // return this.LogRepository.find({
+    // return this.logRepository.find({
     //   where: {
     //     user,
     //   },
@@ -66,19 +66,21 @@ export class UserService {
   }
 
   readLogByGroup(id: number) {
-    // SELECT log.result, COUNT(log.result) from log, user WHERE user.id = log.userId AND user.id = 2 GROUP BY log.result
-    return (
-      this.LogRepository.createQueryBuilder('log')
-        .select('log.result', 'result')
-        .addSelect('COUNT("log.result")', 'count')
-        .leftJoinAndSelect('log.user', 'user')
-        .where('user.id = :id', { id })
-        .groupBy('log.result')
-        // .orderBy('result', 'DESC')
-        .orderBy('count', 'DESC')
-        .addOrderBy('result', 'DESC')
-        .getRawMany()
-    )
+    // return (
+    //   this.logRepository.createQueryBuilder('log')
+    //     .select('log.result', 'result')
+    //     .addSelect('COUNT("log.result")', 'count')
+    //     .leftJoinAndSelect('log.user', 'user')
+    //     .where('user.id = :id', { id })
+    //     .groupBy('log.result')
+    //     // .orderBy('result', 'DESC')
+    //     .orderBy('count', 'DESC')
+    //     .addOrderBy('result', 'DESC')
+    //     .getRawMany()
+    // )
+
+    // 使用原生 sql
+    return this.logRepository.query(`SELECT log.result, COUNT(log.result) as count from log, user WHERE user.id = log.userId AND user.id = ${id} GROUP BY log.result`)
   }
 
   async readRole(id: number) {

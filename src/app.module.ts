@@ -51,7 +51,7 @@ const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`
           synchronize: service.get('DB_SYNC'),
           autoLoadEntities: true,
           // entities: [User, Profile, Log, Role],
-          logging: ['warn', 'error'],
+          logging: process.env.NODE_ENV === 'development' ? true : ['warn', 'error'],
         }) as TypeOrmModuleOptions,
     }),
     // TypeOrmModule.forRoot({
