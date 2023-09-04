@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { Global, Logger, Module } from '@nestjs/common'
 
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm'
@@ -17,6 +17,7 @@ import { UserModule } from './user/user.module'
 
 const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`
 
+@Global()
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -51,7 +52,8 @@ const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`
           synchronize: service.get('DB_SYNC'),
           autoLoadEntities: true,
           // entities: [User, Profile, Log, Role],
-          logging: process.env.NODE_ENV === 'development' ? true : ['warn', 'error'],
+          // logging: process.env.NODE_ENV === 'development' ? true : ['warn', 'error'],
+          logging: ['warn', 'error'],
         }) as TypeOrmModuleOptions,
     }),
     // TypeOrmModule.forRoot({
@@ -71,6 +73,7 @@ const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`
     RoleModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, Logger],
+  exports: [Logger],
 })
 export class AppModule {}

@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Patch, Post } from '@nestjs/common'
+import { Controller, Delete, Get, Logger, Patch, Post } from '@nestjs/common'
 
 import { User } from './user.entity'
 // import { ConfigService } from '@nestjs/config'
@@ -9,6 +9,7 @@ import { UserService } from './user.service'
 export class UserController {
   constructor(
     private service: UserService, // private config: ConfigService,
+    private readonly logger: Logger,
   ) {}
 
   @Post()
@@ -42,6 +43,11 @@ export class UserController {
 
   @Get('list')
   readList(): any {
+    this.logger.log('请求 /list 成功')
+    this.logger.warn('请求 /list 成功')
+    this.logger.verbose('请求 /list 成功')
+    this.logger.debug('请求 /list 成功')
+    this.logger.error('请求 /list 成功')
     return this.service.readList()
   }
 
