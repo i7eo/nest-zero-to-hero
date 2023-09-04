@@ -4,10 +4,10 @@ import * as winston from 'winston'
 import 'winston-daily-rotate-file'
 
 import { AppModule } from './app.module'
+import { HttpExceptionFilter } from './filters/http-exception.filter'
 
 async function bootstrap() {
-  // createLogger of Winston
-  const instance = winston.createLogger({
+  const logger = WinstonModule.createLogger({
     // options of Winston
     transports: [
       new winston.transports.Console({
@@ -40,11 +40,13 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     // // 关闭整个应用的 log
     // logger: false,
-    logger: WinstonModule.createLogger({
-      instance,
-    }),
+    logger,
   })
   app.setGlobalPrefix('api/v1')
-  await app.listen(3000)
+  // 全局filter只能有一个
+  app.useGlobalFilters(new HttpExceptionFilter(logger))
+  await app.listen(3000, async () => {
+    console.log(`:==============================: App is executing, the url is ${await app.getUrl()} :==============================:`)
+  })
 }
 bootstrap()

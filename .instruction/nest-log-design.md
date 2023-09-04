@@ -51,3 +51,7 @@
 ## 日志使用
 
 ![nest-log](./nest-log.png)
+
+## 错误全局拦截
+
+![error-exception](./error-exception.png)
