@@ -1,10 +1,10 @@
-import { NestFactory } from '@nestjs/core'
+import { NestFactory, HttpAdapterHost } from '@nestjs/core'
 import { utilities, WinstonModule } from 'nest-winston'
 import * as winston from 'winston'
 import 'winston-daily-rotate-file'
 
 import { AppModule } from './app.module'
-import { HttpExceptionFilter } from './filters/http-exception.filter'
+import { AllExceptionFilter } from './filters/all-exception.filter'
 
 async function bootstrap() {
   const logger = WinstonModule.createLogger({
@@ -44,7 +44,9 @@ async function bootstrap() {
   })
   app.setGlobalPrefix('api/v1')
   // 全局filter只能有一个
-  app.useGlobalFilters(new HttpExceptionFilter(logger))
+  // app.useGlobalFilters(new HttpExceptionFilter(logger))
+  const httpAdapter = app.get(HttpAdapterHost)
+  app.useGlobalFilters(new AllExceptionFilter(logger, httpAdapter))
   await app.listen(3000, async () => {
     console.log(`:==============================: App is executing, the url is ${await app.getUrl()} :==============================:`)
   })

@@ -32,6 +32,9 @@ dependencies:
   '@types/lodash':
     specifier: ^4.14.196
     version: 4.14.196
+  '@types/request-ip':
+    specifier: ^0.0.38
+    version: 0.0.38
   '@types/sanitize-html':
     specifier: ^2.9.0
     version: 2.9.0
@@ -65,6 +68,9 @@ dependencies:
   reflect-metadata:
     specifier: ^0.1.13
     version: 0.1.13
+  request-ip:
+    specifier: ^3.3.0
+    version: 3.3.0
   rimraf:
     specifier: ^5.0.1
     version: 5.0.1
@@ -1501,6 +1507,12 @@ packages:
 
   /@types/range-parser@1.2.4:
     resolution: {integrity: sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==}
+    dev: false
+
+  /@types/request-ip@0.0.38:
+    resolution: {integrity: sha512-1yeq8UuK/tUBqLXRY24gjeFvrSNaGNcOcZLQjHlnuw8iu+qE/vTQ64TUcLWorr607NKLfFakdoYEXXHXrLLKCw==}
+    dependencies:
+      '@types/node': 20.4.5
     dev: false
 
   /@types/sanitize-html@2.9.0:
@@ -5874,6 +5886,10 @@ packages:
     resolution: {integrity: sha512-PV0dzCYDNfRi1jCDbJzpW7jNNDRuCOG/jI5ctQcGKt/clZD+YcPS3yIlWuTJMmESC8aevCFmWJy5wjAFgNqN6w==}
     engines: {node: '>=0.10'}
     dev: true
+
+  /request-ip@3.3.0:
+    resolution: {integrity: sha512-cA6Xh6e0fDBBBwH77SLJaJPBmD3nWVAcF9/XAcsrIHdjhFzFiB5aNQFytdjCGPezU3ROwrR11IddKAM08vohxA==}
+    dev: false
 
   /require-directory@2.1.1:
     resolution: {integrity: sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==}
