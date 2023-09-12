@@ -28,7 +28,7 @@ const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`
       validationSchema: joi.object({
         NODE_ENV: joi.string().valid('development', 'test', 'production').default('development'),
         DB_TYPE: joi.string().valid('mysql'),
-        DB_HOST: joi.string().ip(),
+        DB_HOST: joi.alternatives().try(joi.string().ip(), joi.string().domain()),
         // DB_PORT: joi.number().default(3306),
         DB_PORT: joi.number(),
         DB_SYNC: joi.boolean().default(false),
@@ -36,6 +36,8 @@ const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`
         DB_DATABASE: joi.string().required(),
         DB_USERNAME: joi.string().required(),
         DB_PASSWORD: joi.string().required(),
+        LOG_ENABLE: joi.boolean(),
+        LOG_LEVEL: joi.string().default('info'),
       }),
     }),
     TypeOrmModule.forRoot(typeromMysqlOptions),
