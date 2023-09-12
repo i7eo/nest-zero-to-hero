@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
-import { Log } from '@/log/log.entity'
+import { Log } from '../log/log.entity'
 
 import { Profile } from './profile.entity'
 

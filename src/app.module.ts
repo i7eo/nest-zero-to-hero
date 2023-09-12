@@ -5,12 +5,11 @@ import { TypeOrmModule /* , TypeOrmModuleOptions */ } from '@nestjs/typeorm'
 import * as dotenv from 'dotenv'
 import * as joi from 'joi'
 
-import ormconfig from '../ormconfig'
-
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 // import { Log } from './log/log.entity'
 import { LogModule } from './log/log.module'
+import { typeromMysqlOptions } from './ormconfig'
 // import { Role } from './role/role.entity'
 import { RoleModule } from './role/role.module'
 // import { Profile } from './user/profile.entity'
@@ -39,7 +38,7 @@ const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`
         DB_PASSWORD: joi.string().required(),
       }),
     }),
-    TypeOrmModule.forRoot(ormconfig),
+    TypeOrmModule.forRoot(typeromMysqlOptions),
     // TypeOrmModule.forRootAsync({
     //   imports: [ConfigModule],
     //   inject: [ConfigService],

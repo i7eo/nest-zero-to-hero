@@ -1,7 +1,8 @@
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
 
-import { Log } from '@/log/log.entity'
-import { Role } from '@/role/role.entity'
+import { Log } from '../log/log.entity'
+import { Role } from '../role/role.entity'
+
 import { Profile } from './profile.entity'
 
 @Entity()
