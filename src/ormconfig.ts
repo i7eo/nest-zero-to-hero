@@ -17,7 +17,7 @@ function getEnv(env: string): Record<string, any> {
   return {}
 }
 
-function buildConnectionOptions() {
+function createOptions() {
   const config = { ...getEnv('.env'), ...getEnv(`.env.${process.env.NODE_ENV || 'development'}`) }
   return {
     type: config.DB_TYPE,
@@ -36,7 +36,7 @@ function buildConnectionOptions() {
 }
 
 // 给自己得项目用
-export const typeromMysqlOptions = buildConnectionOptions()
+export const typeromMysqlOptions = createOptions()
 
 // 给 typeorm cli 做 migration 用
 export default new DataSource({
