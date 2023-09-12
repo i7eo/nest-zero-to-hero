@@ -4,11 +4,6 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm'
 import * as dotenv from 'dotenv'
 import { DataSource, DataSourceOptions } from 'typeorm'
 
-import { Log } from './log/log.entity'
-import { Role } from './role/role.entity'
-import { Profile } from './user/profile.entity'
-import { User } from './user/user.entity'
-
 // 通过环境变量读取不同得 .env 文件
 function getEnv(env: string): Record<string, any> {
   if (fs.existsSync(env)) {
@@ -29,7 +24,8 @@ function createOptions() {
     /** 同步实体至数据库 */
     synchronize: config.DB_SYNC,
     // autoLoadEntities: true,
-    entities: [User, Profile, Log, Role],
+    // entities: [User, Profile, Log, Role],
+    entities: [`${__dirname}/**/*.entity{.js,.ts}`],
     // logging: process.env.NODE_ENV === 'development' ? true : ['warn', 'error'],
     logging: ['warn', 'error'],
   } as TypeOrmModuleOptions
