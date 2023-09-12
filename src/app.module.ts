@@ -1,9 +1,11 @@
 import { Global, Logger, Module } from '@nestjs/common'
 
-import { ConfigModule, ConfigService } from '@nestjs/config'
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm'
+import { ConfigModule /* , ConfigService */ } from '@nestjs/config'
+import { TypeOrmModule /* , TypeOrmModuleOptions */ } from '@nestjs/typeorm'
 import * as dotenv from 'dotenv'
 import * as joi from 'joi'
+
+import ormconfig from '../ormconfig'
 
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
@@ -37,36 +39,25 @@ const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`
         DB_PASSWORD: joi.string().required(),
       }),
     }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (service: ConfigService) =>
-        ({
-          type: service.get('DB_TYPE'),
-          host: service.get('DB_HOST'),
-          port: service.get('DB_PORT'),
-          database: service.get('DB_DATABASE'),
-          username: service.get('DB_USERNAME'),
-          password: service.get('DB_PASSWORD'),
-          /** 同步实体至数据库 */
-          synchronize: service.get('DB_SYNC'),
-          autoLoadEntities: true,
-          // entities: [User, Profile, Log, Role],
-          // logging: process.env.NODE_ENV === 'development' ? true : ['warn', 'error'],
-          logging: ['warn', 'error'],
-        }) as TypeOrmModuleOptions,
-    }),
-    // TypeOrmModule.forRoot({
-    //   type: 'mysql',
-    //   host: 'localhost',
-    //   port: 8081,
-    //   username: 'root',
-    //   password: '123456',
-    //   database: 'testdb',
-    //   entities: [],
-    //   /** 同步实体至数据库 */
-    //   synchronize: true,
-    //   logging: ['warn', 'error'],
+    TypeOrmModule.forRoot(ormconfig),
+    // TypeOrmModule.forRootAsync({
+    //   imports: [ConfigModule],
+    //   inject: [ConfigService],
+    //   useFactory: (service: ConfigService) =>
+    //     ({
+    //       type: service.get('DB_TYPE'),
+    //       host: service.get('DB_HOST'),
+    //       port: service.get('DB_PORT'),
+    //       database: service.get('DB_DATABASE'),
+    //       username: service.get('DB_USERNAME'),
+    //       password: service.get('DB_PASSWORD'),
+    //       /** 同步实体至数据库 */
+    //       synchronize: service.get('DB_SYNC'),
+    //       autoLoadEntities: true,
+    //       // entities: [User, Profile, Log, Role],
+    //       // logging: process.env.NODE_ENV === 'development' ? true : ['warn', 'error'],
+    //       logging: ['warn', 'error'],
+    //     }) as TypeOrmModuleOptions,
     // }),
     UserModule,
     LogModule,
