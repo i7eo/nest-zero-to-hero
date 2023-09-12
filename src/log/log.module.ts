@@ -9,7 +9,6 @@ import { LogController } from './log.controller'
 import { Log } from './log.entity'
 import { LogService } from './log.service'
 
-// 放在内部无论 LOG_ENABLE 为什么都会生成 logs 文件夹这是 winston-daily-rotate-file 的 bug，只能提取出来
 function createDailyTransport(level: string) {
   return new winston.transports.DailyRotateFile({
     dirname: 'logs',
@@ -34,6 +33,7 @@ function createDailyTransport(level: string) {
           level: 'info',
           format: winston.format.combine(winston.format.timestamp(), utilities.format.nestLike()),
         })
+        // 放在内部无论 LOG_ENABLE 为什么都会生成 logs 文件夹，因为只要 new winston.transports.DailyRotateFile 使用了 new 都会创建文件夹。所以提出去
         // const dailyTransport = new winston.transports.DailyRotateFile({
         //   dirname: 'logs',
         //   level,
