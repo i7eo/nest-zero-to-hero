@@ -6,7 +6,7 @@ import { User } from './user.entity'
 
 import { UserService } from './user.service'
 
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(
     private service: UserService, // private config: ConfigService,
@@ -16,7 +16,7 @@ export class UserController {
   }
 
   @Post()
-  create(): any {
+  createUser(): any {
     const user = {
       username: 'i7eo',
       password: '123456',
@@ -25,8 +25,24 @@ export class UserController {
     return this.service.create(user)
   }
 
-  @Patch()
-  update(): any {
+  @Get()
+  readUsers(): any {
+    this.logger.log('请求 /list 成功')
+    this.logger.warn('请求 /list 成功')
+    this.logger.verbose('请求 /list 成功')
+    this.logger.debug('请求 /list 成功')
+    this.logger.error('请求 /list 成功')
+    return this.service.readList()
+  }
+
+  @Get('/:id')
+  readUser(): any {
+    // return this.service.read(username)
+    return 'hello world'
+  }
+
+  @Patch('/:id')
+  updateUser(): any {
     const user = {
       username: 'i7eo1',
     } as User
@@ -34,24 +50,9 @@ export class UserController {
     return this.service.update(1, user)
   }
 
-  @Get()
-  read(username: string): any {
-    return this.service.read(username)
-  }
-
   @Delete()
-  delete(): any {
+  deleteUser(): any {
     return this.service.delete(1)
-  }
-
-  @Get('list')
-  readList(): any {
-    this.logger.log('请求 /list 成功')
-    this.logger.warn('请求 /list 成功')
-    this.logger.verbose('请求 /list 成功')
-    this.logger.debug('请求 /list 成功')
-    this.logger.error('请求 /list 成功')
-    return this.service.readList()
   }
 
   @Get('profile')
