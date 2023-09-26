@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
 import { Log } from '../log/log.entity'
+import { IReadUsersDto } from './dtos/read-users.dto'
 
 import { User } from './user.entity'
 
@@ -18,20 +19,23 @@ export class UserService {
     return this.repository.save(record)
   }
 
+  read(query: IReadUsersDto) {
+    // SELECT * FROM user u, profile p, role r WHERE u.id = p.uid AND u.id = r.uid AND ...
+    // SELECT * FROM user u LEFT JOIN profile p ON u.id = p.uid LEFT JOIN role r ON u.id = r.uid WHERE ...
+    // 分页 SQL => LIMIT 10 OFFSET 10 || take skip
+    return this.repository.find()
+  }
+
+  readOne(username: string) {
+    return this.repository.findOne({ where: { username } })
+  }
+
   update(id: number, user: Partial<User>) {
     return this.repository.update(id, user)
   }
 
-  read(username: string) {
-    return this.repository.findOne({ where: { username } })
-  }
-
   delete(id: number) {
     return this.repository.delete(id)
-  }
-
-  readList() {
-    return this.repository.find()
   }
 
   readProfile(id: number) {

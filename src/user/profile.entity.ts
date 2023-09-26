@@ -8,6 +8,9 @@ export class Profile {
   id: number
 
   @Column()
+  gender: number
+
+  @Column()
   avator: string
 
   @Column()

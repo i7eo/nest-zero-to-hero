@@ -1,5 +1,7 @@
-import { Body, Controller, Delete, Get, Inject, LoggerService, Param, Patch, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Inject, LoggerService, Param, Patch, Post, Query } from '@nestjs/common'
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston'
+
+import { IReadUsersDto } from './dtos/read-users.dto'
 
 import { User } from './user.entity'
 // import { ConfigService } from '@nestjs/config'
@@ -22,18 +24,19 @@ export class UserController {
   }
 
   @Get()
-  getUsers(): any {
-    this.logger.log('请求 /list 成功')
-    this.logger.warn('请求 /list 成功')
-    this.logger.verbose('请求 /list 成功')
-    this.logger.debug('请求 /list 成功')
-    this.logger.error('请求 /list 成功')
-    return this.service.readList()
+  readUsers(@Query() query: IReadUsersDto): any {
+    console.log('🚀 ~ file: user.controller.ts:27 ~ UserController ~ readUsers ~ query:', query)
+    // this.logger.log('请求 /list 成功')
+    // this.logger.warn('请求 /list 成功')
+    // this.logger.verbose('请求 /list 成功')
+    // this.logger.debug('请求 /list 成功')
+    // this.logger.error('请求 /list 成功')
+    return this.service.read(query)
   }
 
   @Get(':id')
-  getUser(): any {
-    // return this.service.read(username)
+  readUser(): any {
+    // return this.service.readOne(username)
     return 'hello world'
   }
 
@@ -49,7 +52,7 @@ export class UserController {
   }
 
   @Get(':id/profile')
-  getUserProfile(@Param('id') id: number): any {
+  readUserProfile(@Param('id') id: number): any {
     return this.service.readProfile(id)
   }
 
@@ -64,7 +67,7 @@ export class UserController {
   // }
 
   @Get(':id/roles')
-  getUserRoles(@Param('id') id: number): any {
+  readUserRoles(@Param('id') id: number): any {
     return this.service.readRole(id)
   }
 }
