@@ -21,32 +21,56 @@ export class UserService {
   }
 
   read(query: IReadUsersDto) {
-    const { limit = 10, page = 1, username, gender, role } = query
+    // const { limit = 10, page = 1, username, gender, role } = query
+    const { username, gender, role } = query
     // SELECT * FROM user u, profile p, role r WHERE u.id = p.uid AND u.id = r.uid AND ...
     // SELECT * FROM user u LEFT JOIN profile p ON u.id = p.uid LEFT JOIN role r ON u.id = r.uid WHERE ...
     // 分页 SQL => LIMIT 10 OFFSET 10 || take skip
-    return this.repository.find({
-      // 通过 select 筛选属性，如果有联合查询 id 必须带
-      select: {
-        id: true,
-        username: true,
-      },
-      relations: {
-        profile: true,
-        roles: true,
-      },
-      where: {
-        username,
-        profile: {
-          gender,
-        },
-        roles: {
-          id: role,
-        },
-      },
-      take: limit,
-      skip: (page - 1) * limit,
-    })
+    // return this.repository.find({
+    //   // 通过 select 筛选属性，如果有联合查询 id 必须带
+    //   select: {
+    //     id: true,
+    //     username: true,
+    //   },
+    //   relations: {
+    //     profile: true,
+    //     roles: true,
+    //   },
+    //   where: {
+    //     username,
+    //     profile: {
+    //       gender,
+    //     },
+    //     roles: {
+    //       id: role,
+    //     },
+    //   },
+    //   take: limit,
+    //   skip: (page - 1) * limit,
+    // })
+
+    // getRawMany 扁平化嵌套结构
+    const qb = this.repository.createQueryBuilder('user').leftJoinAndSelect('user.profile', 'profile').leftJoinAndSelect('user.roles', 'roles')
+
+    if (username) {
+      qb.where('user.username = :username', { username })
+    } else {
+      qb.where('user.username IS NOT NULL')
+    }
+
+    if (gender) {
+      qb.andWhere('profile.gender = :gender', { gender })
+    } else {
+      qb.andWhere('profile.gender IS NOT NULL')
+    }
+
+    if (role) {
+      qb.andWhere('roles.id = :role', { role })
+    } else {
+      qb.andWhere('roles.id IS NOT NULL')
+    }
+
+    return qb.getMany()
   }
 
   readOne(username: string) {
