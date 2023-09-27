@@ -25,7 +25,6 @@ export class UserController {
 
   @Get()
   readUsers(@Query() query: IReadUsersDto): any {
-    console.log('🚀 ~ file: user.controller.ts:27 ~ UserController ~ readUsers ~ query:', query)
     // this.logger.log('请求 /list 成功')
     // this.logger.warn('请求 /list 成功')
     // this.logger.verbose('请求 /list 成功')

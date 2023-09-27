@@ -26,8 +26,8 @@ function createOptions() {
     // autoLoadEntities: true,
     // entities: [User, Profile, Log, Role],
     entities: [`${__dirname}/**/*.entity{.js,.ts}`],
-    // logging: process.env.NODE_ENV === 'development' ? true : ['warn', 'error'],
-    logging: ['warn', 'error'],
+    logging: process.env.NODE_ENV === 'development' ? true : ['warn', 'error'],
+    // logging: ['warn', 'error'],
   } as TypeOrmModuleOptions
 }
 

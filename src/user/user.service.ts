@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
 import { Log } from '../log/log.entity'
+
 import { IReadUsersDto } from './dtos/read-users.dto'
 
 import { User } from './user.entity'
@@ -20,10 +21,32 @@ export class UserService {
   }
 
   read(query: IReadUsersDto) {
+    const { limit = 10, page = 1, username, gender, role } = query
     // SELECT * FROM user u, profile p, role r WHERE u.id = p.uid AND u.id = r.uid AND ...
     // SELECT * FROM user u LEFT JOIN profile p ON u.id = p.uid LEFT JOIN role r ON u.id = r.uid WHERE ...
     // 分页 SQL => LIMIT 10 OFFSET 10 || take skip
-    return this.repository.find()
+    return this.repository.find({
+      // 通过 select 筛选属性，如果有联合查询 id 必须带
+      select: {
+        id: true,
+        username: true,
+      },
+      relations: {
+        profile: true,
+        roles: true,
+      },
+      where: {
+        username,
+        profile: {
+          gender,
+        },
+        roles: {
+          id: role,
+        },
+      },
+      take: limit,
+      skip: (page - 1) * limit,
+    })
   }
 
   readOne(username: string) {
