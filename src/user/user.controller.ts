@@ -1,5 +1,7 @@
-import { Body, Controller, Delete, Get, Inject, LoggerService, Param, Patch, Post, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Inject, LoggerService, Param, Patch, Post, Query, UseFilters } from '@nestjs/common'
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston'
+
+import { TypeormExceptionFilter } from '@/filters/typeorm-exception.filter'
 
 import { IReadUsersDto } from './dtos/read-users.dto'
 
@@ -9,6 +11,7 @@ import { User } from './user.entity'
 import { UserService } from './user.service'
 
 @Controller('users')
+@UseFilters(TypeormExceptionFilter)
 export class UserController {
   constructor(
     private service: UserService, // private config: ConfigService,

@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
+import { createQBCondition } from '@/utils/db.utils'
+
 import { Log } from '../log/log.entity'
 
 import { IReadUsersDto } from './dtos/read-users.dto'
@@ -21,8 +23,7 @@ export class UserService {
   }
 
   read(query: IReadUsersDto) {
-    // const { limit = 10, page = 1, username, gender, role } = query
-    const { username, gender, role } = query
+    const { limit = 10, page = 1, username, gender, role } = query
     // SELECT * FROM user u, profile p, role r WHERE u.id = p.uid AND u.id = r.uid AND ...
     // SELECT * FROM user u LEFT JOIN profile p ON u.id = p.uid LEFT JOIN role r ON u.id = r.uid WHERE ...
     // 分页 SQL => LIMIT 10 OFFSET 10 || take skip
@@ -52,25 +53,36 @@ export class UserService {
     // getRawMany 扁平化嵌套结构
     const qb = this.repository.createQueryBuilder('user').leftJoinAndSelect('user.profile', 'profile').leftJoinAndSelect('user.roles', 'roles')
 
-    if (username) {
-      qb.where('user.username = :username', { username })
-    } else {
-      qb.where('user.username IS NOT NULL')
-    }
+    // if (username) {
+    //   qb.where('user.username = :username', { username })
+    // } else {
+    //   qb.where('user.username IS NOT NULL')
+    // }
 
-    if (gender) {
-      qb.andWhere('profile.gender = :gender', { gender })
-    } else {
-      qb.andWhere('profile.gender IS NOT NULL')
-    }
+    // if (gender) {
+    //   // where 只能 andwhere 如果还是用 where 则前一个 where 会被覆盖
+    //   qb.andWhere('profile.gender = :gender', { gender })
+    // } else {
+    //   qb.andWhere('profile.gender IS NOT NULL')
+    // }
 
-    if (role) {
-      qb.andWhere('roles.id = :role', { role })
-    } else {
-      qb.andWhere('roles.id IS NOT NULL')
-    }
+    // if (role) {
+    //   qb.andWhere('roles.id = :role', { role })
+    // } else {
+    //   qb.andWhere('roles.id IS NOT NULL')
+    // }
 
-    return qb.getMany()
+    // 避免 if/if 多重判断
+    const newQB = createQBCondition<User>(qb, {
+      'user.username': username,
+      'profile.gender': gender,
+      'roles.id': role,
+    })
+
+    return newQB
+      .take(limit)
+      .skip((page - 1) * limit)
+      .getMany()
   }
 
   readOne(username: string) {
