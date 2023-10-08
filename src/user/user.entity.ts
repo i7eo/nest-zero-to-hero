@@ -31,11 +31,11 @@ export class User {
 
   @AfterInsert()
   afterInsert() {
-    console.log('afterInsert')
+    console.log('afterInsert', this.id, this.username)
   }
 
   @AfterRemove()
   afterRemove() {
-    console.log('afterRemove')
+    console.log('afterRemove', this.id, this.username)
   }
 }

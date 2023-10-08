@@ -48,6 +48,12 @@
 
 3. 建议都使用 repository 来操作数据库，方便后面统一替换 orm 框架
 
+### 命名推荐
+
+1. controller 中尽量语义化
+
+2. service 与 repository 中保持一致
+
 ## Service 中 typeorm 方法对比
 
 1. delete 硬删除，一般需要数据 id 操作，一般在线上不推荐使用
@@ -57,3 +63,7 @@
 3. 钩子函数常用于做一些统计操作
 
 4. create 可以触发 afterinsert 钩子函数
+
+5. 不太重要的数据如：log、profile 可以直接通过 delete 删除，核心数据如：用户信息、订单信息等使用 remove 后可在钩子函数中将其插入一张单独的表进行留存操作
+
+6. save => insert + update (If entity does not exist in the database then inserts, otherwise updates.)
