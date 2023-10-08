@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { AfterInsert, AfterRemove, Column, Entity, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
 
 import { Log } from '../log/log.entity'
 import { Role } from '../role/role.entity'
@@ -10,6 +10,7 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number
 
+  /** 确保 usernmae 唯一 */
   @Column({ unique: true })
   username: string
 
@@ -27,4 +28,14 @@ export class User {
     name: 'users_roles',
   })
   roles: Role[]
+
+  @AfterInsert()
+  afterInsert() {
+    console.log('afterInsert')
+  }
+
+  @AfterRemove()
+  afterRemove() {
+    console.log('afterRemove')
+  }
 }

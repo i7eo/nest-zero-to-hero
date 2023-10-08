@@ -35,3 +35,25 @@
 ## 设计范式
 
 请查阅 [数据库设计三大范式](./sql-design.md)
+
+## Service 与 Repository
+
+![service-repository-different](./service-repository-different.png)
+
+### 何时拆分
+
+1. service 内部方法数量大于6个
+
+2. 总代码行数大于300行
+
+3. 建议都使用 repository 来操作数据库，方便后面统一替换 orm 框架
+
+## Service 中 typeorm 方法对比
+
+1. delete 硬删除，一般需要数据 id 操作，一般在线上不推荐使用
+
+2. delete 无法触发 typeorm 的钩子函数，详情见：<https://typeorm.io/listeners-and-subscribers>
+
+3. 钩子函数常用于做一些统计操作
+
+4. create 可以触发 afterinsert 钩子函数

@@ -93,8 +93,13 @@ export class UserService {
     return this.repository.update(id, user)
   }
 
-  delete(id: number) {
-    return this.repository.delete(id)
+  // delete(id: number) {
+  //   return this.repository.delete(id)
+  // }
+
+  async delete(id: number) {
+    const user = await this.repository.findOne({ where: { id } })
+    return this.repository.remove(user)
   }
 
   readProfile(id: number) {
@@ -112,7 +117,7 @@ export class UserService {
     // const user = await this.repository.findOne({ where: { id } })
     // return this.logRepository.find({
     //   where: {
-    //     user,
+    //     user: user.logs,
     //   },
     //   relations: {
     //     user: true,
