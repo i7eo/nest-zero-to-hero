@@ -89,8 +89,14 @@ export class UserService {
     return this.repository.findOne({ where: { username } })
   }
 
-  update(id: number, user: Partial<User>) {
-    return this.repository.update(id, user)
+  async update(id: number, user: Partial<User>) {
+    const userWithProfile = await this.readProfile(id)
+    const newuser = this.repository.merge(userWithProfile, user)
+    // 联合模型更新使用 save 或者 querybuilder
+    return this.repository.save(newuser)
+
+    // 下面的更新方法只适合单模型更新，不适合有关系的模型更新
+    // return this.repository.update(id, user)
   }
 
   // delete(id: number) {

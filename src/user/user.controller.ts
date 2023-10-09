@@ -43,12 +43,24 @@ export class UserController {
   }
 
   @Patch(':id')
+  /**
+   * update 注意事项：
+   * 1. 权限1：判断用户是否为自己
+   * 2. 权限2：判断用户是否有更新权限
+   * 3. 返回数据：不能包含敏感信息（密码）
+   */
   updateUser(@Param('id') id: number, @Body() dto: any): any {
+    console.log('🚀 ~ file: user.controller.ts:53 ~ UserController ~ updateUser ~ dto:', dto)
+    console.log('🚀 ~ file: user.controller.ts:53 ~ UserController ~ updateUser ~ id:', id)
     const user = dto as User
     return this.service.update(id, user)
   }
 
   @Delete(':id')
+  /**
+   * delete 注意事项：
+   * 1. 权限1：判断用户是否有删除权限
+   */
   deleteUser(@Param('id') id: number): any {
     return this.service.delete(id)
   }

@@ -17,7 +17,9 @@ export class User {
   @Column()
   password: string
 
-  @OneToOne(() => Profile, (profile) => profile.user)
+  @OneToOne(() => Profile, (profile) => profile.user, {
+    cascade: true,
+  })
   profile: Profile
 
   @OneToMany(() => Log, (log) => log.user)
