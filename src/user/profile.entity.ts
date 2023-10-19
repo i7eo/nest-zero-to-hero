@@ -1,14 +1,23 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm'
 
 import { User } from './user.entity'
 
 @Entity()
 export class Profile {
-  @PrimaryGeneratedColumn()
-  id: number
+  // @PrimaryGeneratedColumn()
+  // id: number
+  @PrimaryColumn({ type: 'varchar', generated: 'uuid', length: 36 })
+  id: string
 
   @Column()
-  gender: number
+  // 对应字典表的 value
+  gender: string
+
+  // 字典表不需要外键
+  // @OneToOne(() => Gender, (gender) => gender.profile, {
+  //   cascade: true,
+  // })
+  // gender: string
 
   @Column()
   avator: string
@@ -19,7 +28,13 @@ export class Profile {
   @Column()
   address: string
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, (user) => user.profile)
   @JoinColumn()
   user: User
+
+  @CreateDateColumn()
+  createdAt: Date
+
+  @CreateDateColumn()
+  updatedAt: Date
 }

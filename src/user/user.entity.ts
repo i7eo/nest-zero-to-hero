@@ -1,4 +1,4 @@
-import { AfterInsert, AfterRemove, Column, Entity, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { AfterInsert, AfterRemove, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryColumn } from 'typeorm'
 
 import { Log } from '../log/log.entity'
 import { Role } from '../role/role.entity'
@@ -7,8 +7,10 @@ import { Profile } from './profile.entity'
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number
+  // @PrimaryGeneratedColumn()
+  // id: number
+  @PrimaryColumn({ type: 'varchar', generated: 'uuid', length: 36 })
+  id: string
 
   /** 确保 usernmae 唯一 */
   @Column({ unique: true })
@@ -30,6 +32,12 @@ export class User {
     name: 'users_roles',
   })
   roles: Role[]
+
+  @CreateDateColumn()
+  createdAt: Date
+
+  @CreateDateColumn()
+  updatedAt: Date
 
   @AfterInsert()
   afterInsert() {

@@ -49,7 +49,7 @@ export class UserController {
    * 2. 权限2：判断用户是否有更新权限
    * 3. 返回数据：不能包含敏感信息（密码）
    */
-  updateUser(@Param('id') id: number, @Body() dto: any): any {
+  updateUser(@Param('id') id: string, @Body() dto: any): any {
     console.log('🚀 ~ file: user.controller.ts:53 ~ UserController ~ updateUser ~ dto:', dto)
     console.log('🚀 ~ file: user.controller.ts:53 ~ UserController ~ updateUser ~ id:', id)
     const user = dto as User
@@ -61,17 +61,17 @@ export class UserController {
    * delete 注意事项：
    * 1. 权限1：判断用户是否有删除权限
    */
-  deleteUser(@Param('id') id: number): any {
+  deleteUser(@Param('id') id: string): any {
     return this.service.delete(id)
   }
 
   @Get(':id/profile')
-  readUserProfile(@Param('id') id: number): any {
+  readUserProfile(@Param('id') id: string): any {
     return this.service.readProfile(id)
   }
 
   @Get(':id/logs')
-  readLogs(@Param('id') id: number): any {
+  readLogs(@Param('id') id: string): any {
     return this.service.readLog(id)
   }
 
@@ -81,7 +81,7 @@ export class UserController {
   // }
 
   @Get(':id/roles')
-  readUserRoles(@Param('id') id: number): any {
+  readUserRoles(@Param('id') id: string): any {
     return this.service.readRole(id)
   }
 }

@@ -7,6 +7,7 @@ import * as joi from 'joi'
 
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
+import { GenderModule } from './gender/gender.module'
 // import { Log } from './log/log.entity'
 import { LogModule } from './log/log.module'
 import { typeromMysqlOptions } from './ormconfig'
@@ -63,6 +64,7 @@ const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`
     UserModule,
     LogModule,
     RoleModule,
+    GenderModule,
   ],
   controllers: [AppController],
   providers: [AppService, Logger],

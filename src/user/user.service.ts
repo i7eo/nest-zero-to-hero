@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
+import { Role } from '@/role/role.entity'
 import { createQBCondition } from '@/utils/db.utils'
 
 import { Log } from '../log/log.entity'
@@ -14,12 +15,20 @@ import { User } from './user.entity'
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly repository: Repository<User>,
+    @InjectRepository(Role) private readonly roleRepository: Repository<Role>,
     @InjectRepository(Log) private readonly logRepository: Repository<Log>,
   ) {}
 
-  create(user: User) {
-    const record = this.repository.create(user)
-    return this.repository.save(record)
+  async create(user: User) {
+    // console.log('🚀 ~ file: user.service.ts:21 ~ UserService ~ create ~ user:', user)
+    const roles = user.roles as unknown as Role['value'][]
+    const roleRecords = await Promise.all(
+      roles.map(async (value) => {
+        return this.roleRepository.findOne({ where: { value } })
+      }),
+    )
+    const newUser = this.repository.create({ ...user, roles: roleRecords })
+    return this.repository.save(newUser)
   }
 
   read(query: IReadUsersDto) {
@@ -76,7 +85,7 @@ export class UserService {
     const newQB = createQBCondition<User>(qb, {
       'user.username': username,
       'profile.gender': gender,
-      'roles.id': role,
+      'roles.value': role,
     })
 
     return newQB
@@ -89,7 +98,7 @@ export class UserService {
     return this.repository.findOne({ where: { username } })
   }
 
-  async update(id: number, user: Partial<User>) {
+  async update(id: string, user: Partial<User>) {
     const userWithProfile = await this.readProfile(id)
     const newuser = this.repository.merge(userWithProfile, user)
     // 联合模型更新使用 save 或者 querybuilder
@@ -99,16 +108,16 @@ export class UserService {
     // return this.repository.update(id, user)
   }
 
-  // delete(id: number) {
+  // delete(id: string) {
   //   return this.repository.delete(id)
   // }
 
-  async delete(id: number) {
+  async delete(id: string) {
     const user = await this.repository.findOne({ where: { id } })
     return this.repository.remove(user)
   }
 
-  readProfile(id: number) {
+  readProfile(id: string) {
     return this.repository.findOne({
       where: {
         id,
@@ -119,7 +128,7 @@ export class UserService {
     })
   }
 
-  async readLog(id: number) {
+  async readLog(id: string) {
     // const user = await this.repository.findOne({ where: { id } })
     // return this.logRepository.find({
     //   where: {
@@ -157,7 +166,7 @@ export class UserService {
     return this.logRepository.query(`SELECT log.result, COUNT(log.result) as count from log, user WHERE user.id = log.userId AND user.id = ${id} GROUP BY log.result`)
   }
 
-  async readRole(id: number) {
+  async readRole(id: string) {
     return this.repository.find({
       where: {
         id,
