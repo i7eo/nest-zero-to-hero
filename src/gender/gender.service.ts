@@ -21,6 +21,7 @@ export class GenderService {
     const newQB = createQBCondition<Gender>(qb)
 
     return newQB
+      .orderBy('gender.value', 'ASC')
       .take(limit)
       .skip((page - 1) * limit)
       .getMany()

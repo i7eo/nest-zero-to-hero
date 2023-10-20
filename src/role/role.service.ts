@@ -21,6 +21,7 @@ export class RoleService {
     const newQB = createQBCondition<Role>(qb)
 
     return newQB
+      .orderBy('role.value', 'ASC')
       .take(limit)
       .skip((page - 1) * limit)
       .getMany()
