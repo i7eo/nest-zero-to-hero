@@ -20,14 +20,27 @@ export class UserService {
   ) {}
 
   async create(user: User) {
-    // console.log('🚀 ~ file: user.service.ts:21 ~ UserService ~ create ~ user:', user)
-    const roles = user.roles as unknown as Role['value'][]
-    const roleRecords = await Promise.all(
-      roles.map(async (value) => {
+    console.log('🚀 ~ file: user.service.ts:21 ~ UserService ~ create ~ user:', user)
+
+    // // 如果系统简单不想做数据字典的话，user 关联的 gender 与 roles 可以按如下方式处理：
+    // if (user.roles instanceof Array && typeof user.roles[0] === 'number') {
+    //   // 查询user所有的 role
+    //   user.roles = await this.roleRepository.find({
+    //     where: In(user.roles),
+    //   })
+    // }
+
+    const roleValues = user.roles as unknown as Role['value'][]
+    const roles = await Promise.all(
+      roleValues.map(async (value) => {
         return this.roleRepository.findOne({ where: { value } })
       }),
     )
-    const newUser = this.repository.create({ ...user, roles: roleRecords })
+    // // 循环太麻烦了，借助 In 实现
+    // const roles = await this.roleRepository.find({
+    //   where: In(user.roles),
+    // })
+    const newUser = this.repository.create({ ...user, roles })
     return this.repository.save(newUser)
   }
 

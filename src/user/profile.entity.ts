@@ -28,7 +28,9 @@ export class Profile {
   @Column()
   address: string
 
-  @OneToOne(() => User, (user) => user.profile)
+  // @OneToOne(() => User, (user) => user.profile, { cascade: true })
+  // 为什么不能再双边关系都设置 cascade: true，因为会陷入循环调用，建议在主键方设置就行，关联方只能设置明确的 cascade 行为
+  @OneToOne(() => User, (user) => user.profile, { onDelete: 'CASCADE' })
   @JoinColumn()
   user: User
 
