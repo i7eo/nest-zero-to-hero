@@ -63,3 +63,7 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHBpcmVUaW1lIjoiMjAyMy0xMS0yNyAxNzowMCI
 - 其中前端将登陆成功返回的 token 存储在 HTTP Header 中，每次请求都携带。后端读取到 HTTP Header 中的 token 信息，通过签名时的 `secret` 将其解密验证其是否是有效的 token
 
 - 中间人此时如果拿到 token 在没过期的情况下确实拥有 token 对应账户的权限，但一般中间人（代码攻击、爬虫等）抓取到 HTTPS 站点信息后需要 ssl 令牌才能解密。服务端如果能记录当前 token 属于哪个账户当然更好，但因为 JWT 无状态的特性所以这个并没有实现
+
+## API 安全设计
+
+![nest-api-secure-design](./nest-login-auth-4.png)
