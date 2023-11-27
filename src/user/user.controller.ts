@@ -50,8 +50,8 @@ export class UserController {
    * 3. 返回数据：不能包含敏感信息（密码）
    */
   updateUser(@Param('id') id: string, @Body() dto: any): any {
-    console.log('🚀 ~ file: user.controller.ts:53 ~ UserController ~ updateUser ~ dto:', dto)
-    console.log('🚀 ~ file: user.controller.ts:53 ~ UserController ~ updateUser ~ id:', id)
+    // console.log('🚀 ~ file: user.controller.ts:53 ~ UserController ~ updateUser ~ dto:', dto)
+    // console.log('🚀 ~ file: user.controller.ts:53 ~ UserController ~ updateUser ~ id:', id)
     const user = dto as User
     return this.service.update(id, user)
   }
