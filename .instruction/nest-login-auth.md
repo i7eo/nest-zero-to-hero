@@ -36,7 +36,7 @@ JWT 全称 JSON WEB TOKEN, 由 header、payload、signature 组成。
 
 1. Header: `{ "alg": "HS256", "typ": "JWT" }` 加密方式与 token 类型
 
-2. Payload: `{ "name": "admin", "role": "admin", "expireTime": "xxx" }` 用户信息与 token 过期时间
+2. Payload: `{ "sub": "userId", "name": "admin", "role": "admin", "expireTime": "xxx" }` 用户信息与 token 过期时间
 
 3. Signature: `HMACSHA256(base64UrlEncode(header) + "." + base64UrlEncode(payload), secret)` 使用 Header 规定的加密方式对经过 base64 处理的 Header 与 Payload 进行加密处理
 

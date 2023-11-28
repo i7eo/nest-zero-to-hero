@@ -19,7 +19,7 @@ export class UserService {
     @InjectRepository(Log) private readonly logRepository: Repository<Log>,
   ) {}
 
-  async create(user: User) {
+  async create(user: Partial<User>) {
     // console.log('🚀 ~ file: user.service.ts:21 ~ UserService ~ create ~ user:', user)
 
     // // 如果系统简单不想做数据字典的话，user 关联的 gender 与 roles 可以按如下方式处理：

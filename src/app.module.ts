@@ -16,6 +16,7 @@ import { RoleModule } from './role/role.module'
 // import { Profile } from './user/profile.entity'
 // import { User } from './user/user.entity'
 import { UserModule } from './user/user.module'
+import { AuthModule } from './auth/auth.module';
 
 const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`
 
@@ -65,6 +66,7 @@ const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`
     LogModule,
     RoleModule,
     GenderModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService, Logger],

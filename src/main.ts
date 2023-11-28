@@ -54,7 +54,7 @@ async function bootstrap() {
   const httpAdapter = app.get(HttpAdapterHost)
   app.useGlobalFilters(new AllExceptionFilter(logger, httpAdapter))
 
-  await app.listen(3000, async () => {
+  await app.listen(3090, async () => {
     console.log(`:==============================: App is executing, the url is ${await app.getUrl()} :==============================:`)
   })
 }
