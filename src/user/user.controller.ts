@@ -3,8 +3,10 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston'
 
 import { TypeormExceptionFilter } from '@/filters/typeorm-exception.filter'
 
-import { IReadUsersDto } from './dtos/read-users.dto'
+import { CreateUserDto } from './dto/create-user.dto'
+import { IReadUsersDto } from './dto/read-users.dto'
 
+import { CreateUserPipe } from './pipe/create-user/create-user.pipe'
 import { User } from './user.entity'
 // import { ConfigService } from '@nestjs/config'
 
@@ -21,7 +23,7 @@ export class UserController {
   }
 
   @Post()
-  createUser(@Body() dto: any): any {
+  createUser(@Body(CreateUserPipe) dto: CreateUserDto): any {
     const user = dto as User
     return this.service.create(user)
   }
@@ -66,6 +68,7 @@ export class UserController {
   }
 
   @Get(':id/profile')
+  // @Param('id', ParseIntPipe) // 参数 <= 3 都直接这样写，大于3则需要创建 dto
   readUserProfile(@Param('id') id: string): any {
     return this.service.readProfile(id)
   }

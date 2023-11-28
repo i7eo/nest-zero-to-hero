@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
-import { DEFAULT_ROLE_VALUE } from '@/role/constants'
+// import { DEFAULT_ROLE_VALUE } from '@/role/constants'
 
 import { Role } from '@/role/role.entity'
 import { createQBCondition } from '@/utils/db.utils'
 
 import { Log } from '../log/log.entity'
 
-import { IReadUsersDto } from './dtos/read-users.dto'
+import { IReadUsersDto } from './dto/read-users.dto'
 
 import { User } from './user.entity'
 
@@ -31,12 +31,21 @@ export class UserService {
     //     where: In(user.roles),
     //   })
     // }
-    const roleValues = (user.roles ?? [DEFAULT_ROLE_VALUE]) as unknown as Role['value'][]
+
+    // 放入 pipe 转化
+    // const roleValues = (user.roles ?? [DEFAULT_ROLE_VALUE]) as unknown as Role['value'][]
+    // const roles = await Promise.all(
+    //   roleValues.map(async (value) => {
+    //     return this.roleRepository.findOne({ where: { value } })
+    //   }),
+    // )
+
     const roles = await Promise.all(
-      roleValues.map(async (value) => {
+      (user.roles as unknown as Role['value'][]).map(async (value) => {
         return this.roleRepository.findOne({ where: { value } })
       }),
     )
+
     // // 循环太麻烦了，借助 In 实现
     // const roles = await this.roleRepository.find({
     //   where: In(user.roles),

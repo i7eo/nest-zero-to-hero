@@ -1,6 +1,8 @@
 import { IsNotEmpty, IsString, Length } from 'class-validator'
 
-export class AuthUserDto {
+import { Role } from '@/role/role.entity'
+
+export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   @Length(4, 12, {
@@ -24,4 +26,6 @@ export class AuthUserDto {
     message: `密码长度必须在 $constraint1 与 $constraint2 之间，当前值为: $value`,
   })
   password: string
+
+  roles?: Role[] | string[]
 }
