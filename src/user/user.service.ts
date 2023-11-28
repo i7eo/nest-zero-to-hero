@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
+import { DEFAULT_ROLE_VALUE } from '@/role/constants'
+
 import { Role } from '@/role/role.entity'
 import { createQBCondition } from '@/utils/db.utils'
 
@@ -29,8 +31,7 @@ export class UserService {
     //     where: In(user.roles),
     //   })
     // }
-
-    const roleValues = user.roles as unknown as Role['value'][]
+    const roleValues = (user.roles ?? [DEFAULT_ROLE_VALUE]) as unknown as Role['value'][]
     const roles = await Promise.all(
       roleValues.map(async (value) => {
         return this.roleRepository.findOne({ where: { value } })

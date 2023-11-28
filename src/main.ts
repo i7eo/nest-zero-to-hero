@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common'
+import { Logger, ValidationPipe } from '@nestjs/common'
 import { HttpAdapterHost, NestFactory } from '@nestjs/core'
 import { /* utilities, WinstonModule, */ WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston'
 // import * as winston from 'winston'
@@ -53,6 +53,13 @@ async function bootstrap() {
   // app.useGlobalFilters(new HttpExceptionFilter(logger))
   const httpAdapter = app.get(HttpAdapterHost)
   app.useGlobalFilters(new AllExceptionFilter(logger, httpAdapter))
+
+  // 全局管道
+  app.useGlobalPipes(
+    new ValidationPipe({
+      // whitelist: true, // 去除 entity 上不存在的字段，降低新增、修改时 sql 注入的风险
+    }),
+  )
 
   await app.listen(3090, async () => {
     console.log(`:==============================: App is executing, the url is ${await app.getUrl()} :==============================:`)
