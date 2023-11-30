@@ -7,6 +7,7 @@ import * as joi from 'joi'
 
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
+import { AuthModule } from './auth/auth.module'
 import { GenderModule } from './gender/gender.module'
 // import { Log } from './log/log.entity'
 import { LogModule } from './log/log.module'
@@ -16,7 +17,6 @@ import { RoleModule } from './role/role.module'
 // import { Profile } from './user/profile.entity'
 // import { User } from './user/user.entity'
 import { UserModule } from './user/user.module'
-import { AuthModule } from './auth/auth.module';
 
 const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`
 

@@ -10,7 +10,7 @@ import { RoleService } from './role.service'
 @UseFilters(TypeormExceptionFilter)
 export class RoleController {
   constructor(
-    private service: RoleService, // private config: ConfigService,
+    private service: RoleService,
     @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
   ) {
     this.logger.log('Role controller init')

@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Inject, LoggerService, Param, Patch, Post, Query, UseFilters } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Inject, LoggerService, Param, Patch, Post, Query, UseFilters, UseGuards } from '@nestjs/common'
+import { AuthGuard } from '@nestjs/passport'
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston'
 
 import { TypeormExceptionFilter } from '@/filters/typeorm-exception.filter'
@@ -68,8 +69,14 @@ export class UserController {
   }
 
   @Get(':id/profile')
+  @UseGuards(AuthGuard('jwt'))
   // @Param('id', ParseIntPipe) // 参数 <= 3 都直接这样写，大于3则需要创建 dto
-  readUserProfile(@Param('id') id: string): any {
+  readUserProfile(
+    @Param('id') id: string,
+    // 这里的 req.user 是通过 authguard 中调用 validate 方法返回
+    // @Req() req: any
+  ): any {
+    // console.log('🚀 ~ file: user.controller.ts:75 ~ UserController ~ readUserProfile ~ any:', req)
     return this.service.readProfile(id)
   }
 

@@ -11,9 +11,14 @@ export class AuthController {
   constructor(private readonly service: AuthService) {}
 
   @Post('/signin')
-  signin(@Body() dto: AuthUserDto) {
+  async signin(@Body() dto: AuthUserDto) {
     const { username, password } = dto
-    return this.service.signin(username, password)
+    console.log('signin start')
+    const token = await this.service.signin(username, password)
+    console.log('signin end')
+    return {
+      access_token: token,
+    }
   }
 
   @Post('/signup')

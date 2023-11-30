@@ -64,6 +64,20 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHBpcmVUaW1lIjoiMjAyMy0xMS0yNyAxNzowMCI
 
 - 中间人此时如果拿到 token 在没过期的情况下确实拥有 token 对应账户的权限，但一般中间人（代码攻击、爬虫等）抓取到 HTTPS 站点信息后需要 ssl 令牌才能解密。服务端如果能记录当前 token 属于哪个账户当然更好，但因为 JWT 无状态的特性所以这个并没有实现
 
+### 工作流程
+
+![nest-auth-jwt-progress](./nest-auth-jwt-progress.png)
+
+- `Authentication` 单词不能错
+
+- `Authentication` 必须存在于 Header 中
+
+上述俩点是 jwt 库实现的默认设置
+
+![nest-auth-jwt-progress2](./nest-auth-jwt-progress2.png)
+
+- `authenticate` 是对前端请求发起后对携带的 jwt 数据进行格式上的校验
+
 ## API 安全设计
 
 ![nest-api-secure-design](./nest-login-auth-4.png)
