@@ -154,6 +154,12 @@ Factory(Person).play()
 
 请查阅 [Nestjs Log Design](./.instruction/nest-log-design.md)
 
+## TODO
+
+1. 挂在 controller class 上的 role 如何向每个 method 添加？
+
+2. method 上的 role 能否覆盖 class 上的 role？
+
 ## License
 
 This repository is published under the [MIT](LICENSE) license.

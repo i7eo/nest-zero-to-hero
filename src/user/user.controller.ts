@@ -1,10 +1,12 @@
 import { Body, Controller, Delete, Get, Inject, LoggerService, Param, Patch, Post, Query, UseFilters, UseGuards } from '@nestjs/common'
-import { AuthGuard } from '@nestjs/passport'
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston'
 
+import { Role } from '@/decorators/role.decorator'
 import { TypeormExceptionFilter } from '@/filters/typeorm-exception.filter'
 
-import { AdminGuard } from '@/guards/admin/admin.guard'
+// import { AdminGuard } from '@/guards/admin.guard'
+
+import { JwtGuard } from '@/guards/jwt.guard'
 
 import { CreateUserDto } from './dto/create-user.dto'
 import { IReadUsersDto } from './dto/read-users.dto'
@@ -17,6 +19,8 @@ import { UserService } from './user.service'
 
 @Controller('users')
 @UseFilters(TypeormExceptionFilter)
+@Role()
+@UseGuards(JwtGuard)
 export class UserController {
   constructor(
     private service: UserService, // private config: ConfigService,
@@ -36,7 +40,7 @@ export class UserController {
   // @UseGuards(AdminGuard)
   // @UseGuards(AuthGuard('jwt'))
   // 2. 也可一次性传入多个 guard，在同一个guard装饰器中传入多个 guard则按照顺序依次执行
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  // @UseGuards(AuthGuard('jwt'), AdminGuard)
   readUsers(@Query() query: IReadUsersDto): any {
     // this.logger.log('请求 /list 成功')
     // this.logger.warn('请求 /list 成功')
@@ -76,7 +80,7 @@ export class UserController {
   }
 
   @Get(':id/profile')
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt'))
   // @Param('id', ParseIntPipe) // 参数 <= 3 都直接这样写，大于3则需要创建 dto
   readUserProfile(
     @Param('id') id: string,
