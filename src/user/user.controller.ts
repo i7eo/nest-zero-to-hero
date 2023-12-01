@@ -4,6 +4,8 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston'
 
 import { TypeormExceptionFilter } from '@/filters/typeorm-exception.filter'
 
+import { AdminGuard } from '@/guards/admin/admin.guard'
+
 import { CreateUserDto } from './dto/create-user.dto'
 import { IReadUsersDto } from './dto/read-users.dto'
 
@@ -30,6 +32,11 @@ export class UserController {
   }
 
   @Get()
+  // 1. 需要注意的是装饰器收集顺序由上到下，由左到右，但是执行顺序是由下到上，由右到左，详情可参考：https://i7eo.com/use-express-create-mini-nest
+  // @UseGuards(AdminGuard)
+  // @UseGuards(AuthGuard('jwt'))
+  // 2. 也可一次性传入多个 guard，在同一个guard装饰器中传入多个 guard则按照顺序依次执行
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   readUsers(@Query() query: IReadUsersDto): any {
     // this.logger.log('请求 /list 成功')
     // this.logger.warn('请求 /list 成功')

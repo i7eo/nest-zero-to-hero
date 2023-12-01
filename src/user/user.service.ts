@@ -118,7 +118,7 @@ export class UserService {
   }
 
   readOne(username: string) {
-    return this.repository.findOne({ where: { username } })
+    return this.repository.findOne({ where: { username }, relations: ['roles'] })
   }
 
   async update(id: string, user: Partial<User>) {
