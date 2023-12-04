@@ -14,6 +14,8 @@ export class RoleGuard implements CanActivate {
   constructor(private readonly userService: UserService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    // TODO: controller 放公共的 role 让每个方法自动继承？
+    // const controllerRoleLables = getMetadata(CUSTOM_DECORATOR_ROLE_TOKEN, context.getClass()) as RoleEnumLabel[]
     const roleLabels = getMetadata(CUSTOM_DECORATOR_ROLE_TOKEN, context.getHandler()) as RoleEnumLabel[]
     console.log('🚀 ~ file: role.guard.ts:18 ~ RoleGuard ~ canActivate ~ roleLabels:', roleLabels)
     // 1. 获取请求对象

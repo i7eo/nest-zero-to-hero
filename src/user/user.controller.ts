@@ -19,7 +19,6 @@ import { UserService } from './user.service'
 
 @Controller('users')
 @UseFilters(TypeormExceptionFilter)
-@Role()
 @UseGuards(JwtGuard)
 export class UserController {
   constructor(
@@ -41,6 +40,7 @@ export class UserController {
   // @UseGuards(AuthGuard('jwt'))
   // 2. 也可一次性传入多个 guard，在同一个guard装饰器中传入多个 guard则按照顺序依次执行
   // @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @Role(['maintainer'])
   readUsers(@Query() query: IReadUsersDto): any {
     // this.logger.log('请求 /list 成功')
     // this.logger.warn('请求 /list 成功')
@@ -63,6 +63,7 @@ export class UserController {
    * 2. 权限2：判断用户是否有更新权限
    * 3. 返回数据：不能包含敏感信息（密码）
    */
+  @Role(['maintainer'])
   updateUser(@Param('id') id: string, @Body() dto: any): any {
     // console.log('🚀 ~ file: user.controller.ts:53 ~ UserController ~ updateUser ~ dto:', dto)
     // console.log('🚀 ~ file: user.controller.ts:53 ~ UserController ~ updateUser ~ id:', id)
