@@ -16,7 +16,7 @@ export class RoleGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     // TODO: controller 放公共的 role 让每个方法自动继承？
     // const controllerRoleLables = getMetadata(CUSTOM_DECORATOR_ROLE_TOKEN, context.getClass()) as RoleEnumLabel[]
-    const roleLabels = getMetadata(CUSTOM_DECORATOR_ROLE_TOKEN, context.getHandler()) as RoleEnumLabel[]
+    const roleLabels = getMetadata(CUSTOM_DECORATOR_ROLE_TOKEN, context.getHandler()) as unknown as RoleEnumLabel[]
     console.log('🚀 ~ file: role.guard.ts:18 ~ RoleGuard ~ canActivate ~ roleLabels:', roleLabels)
     // 1. 获取请求对象
     const req = context.switchToHttp().getRequest()
@@ -25,7 +25,7 @@ export class RoleGuard implements CanActivate {
     if (req.user && typeof req.user.username !== 'undefined') {
       const user = (await this.userService.readOne(req.user.username)) as User
       // 3. 根据 control 传入的 role 或者默认 role 进行角色判断
-      if (user.roles?.filter((role) => roleLabels.some((roleLabel) => RoleEnum[roleLabel] === role.value))) {
+      if (user.roles?.filter((role) => roleLabels.some((roleLabel) => RoleEnum[roleLabel] === role.value)).length) {
         return true
       }
       return false

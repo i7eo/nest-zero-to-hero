@@ -1,13 +1,14 @@
 import { UseGuards } from '@nestjs/common'
 
 import { RoleGuard } from '@/guards/role.guard'
-import { DEFAULT_ROLE_LABLE } from '@/role/constants'
 import { RoleEnumLabel } from '@/role/role.entity'
 import { getClassMethods, getMetadata, setMetadata } from '@/utils/metadata.util'
+// import { extendArrayMetadata } from '@/utils/extend-metadata.util'
 
 type Action = 'extends' | 'rewrite'
 
 export const CUSTOM_DECORATOR_ROLE_TOKEN = '__role.decorator__'
+export const CUSTOM_DECORATOR_ROLE_PARAM_ACTION_TOKEN = '__role.decorator.param_action__'
 
 // export function Role(roleLabels: RoleEnumLabel[] = [DEFAULT_ROLE_LABLE]) {
 //   console.log('🚀 ~ file: role.decorator.ts:11 ~ Role ~ roleLabels:', roleLabels)
@@ -15,19 +16,24 @@ export const CUSTOM_DECORATOR_ROLE_TOKEN = '__role.decorator__'
 // }
 
 function RoleDecorator(roleLabels: RoleEnumLabel[], action: Action, target: any, key?: string | symbol, descriptor?: TypedPropertyDescriptor<any>) {
-  if (action === 'extends') {
+  const previousAction = (getMetadata(CUSTOM_DECORATOR_ROLE_PARAM_ACTION_TOKEN, descriptor.value) || 'extends') as Action
+  if (previousAction === 'extends') {
     const previousRoleLabels = (getMetadata(CUSTOM_DECORATOR_ROLE_TOKEN, descriptor.value) || []) as RoleEnumLabel[]
-    setMetadata(CUSTOM_DECORATOR_ROLE_TOKEN, [...previousRoleLabels, roleLabels])(target, key, descriptor)
+    setMetadata(CUSTOM_DECORATOR_ROLE_TOKEN, [...previousRoleLabels, ...roleLabels])(target, key, descriptor)
     if (!previousRoleLabels.length) {
       UseGuards(RoleGuard)(target, key, descriptor)
     }
   } else {
-    setMetadata(CUSTOM_DECORATOR_ROLE_TOKEN, roleLabels)(target, key, descriptor)
+    const previousRoleLabels = (getMetadata(CUSTOM_DECORATOR_ROLE_TOKEN, descriptor.value) || []) as RoleEnumLabel[]
+    setMetadata(CUSTOM_DECORATOR_ROLE_TOKEN, previousRoleLabels)(target, key, descriptor)
     UseGuards(RoleGuard)(target, key, descriptor)
+  }
+  if (previousAction !== action) {
+    setMetadata(CUSTOM_DECORATOR_ROLE_PARAM_ACTION_TOKEN, action)(target, key, descriptor)
   }
 }
 
-export function Role(roleLabels: RoleEnumLabel[] = [DEFAULT_ROLE_LABLE], action: Action = 'extends'): MethodDecorator & ClassDecorator {
+export function Role(roleLabels: RoleEnumLabel[], action: Action = 'extends'): MethodDecorator & ClassDecorator {
   return (target: any, key?: string | symbol, descriptor?: TypedPropertyDescriptor<any>) => {
     // if (descriptor) {
     //   extendArrayMetadata(CUSTOM_DECORATOR_ROLE_TOKEN, roleLabels, descriptor.value)

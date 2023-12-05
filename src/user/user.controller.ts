@@ -19,7 +19,7 @@ import { UserService } from './user.service'
 
 @Controller('users')
 @UseFilters(TypeormExceptionFilter)
-@Role()
+@Role(['developer'])
 @UseGuards(JwtGuard)
 export class UserController {
   constructor(
@@ -30,6 +30,7 @@ export class UserController {
   }
 
   @Post()
+  @Role(['owner', 'maintainer'], 'rewrite')
   createUser(@Body(CreateUserPipe) dto: CreateUserDto): any {
     const user = dto as User
     return this.service.create(user)
@@ -41,7 +42,6 @@ export class UserController {
   // @UseGuards(AuthGuard('jwt'))
   // 2. 也可一次性传入多个 guard，在同一个guard装饰器中传入多个 guard则按照顺序依次执行
   // @UseGuards(AuthGuard('jwt'), AdminGuard)
-  @Role(['owner'])
   readUsers(@Query() query: IReadUsersDto): any {
     // this.logger.log('请求 /list 成功')
     // this.logger.warn('请求 /list 成功')
@@ -64,6 +64,7 @@ export class UserController {
    * 2. 权限2：判断用户是否有更新权限
    * 3. 返回数据：不能包含敏感信息（密码）
    */
+  @Role(['owner', 'maintainer'], 'rewrite')
   updateUser(@Param('id') id: string, @Body() dto: any): any {
     // console.log('🚀 ~ file: user.controller.ts:53 ~ UserController ~ updateUser ~ dto:', dto)
     // console.log('🚀 ~ file: user.controller.ts:53 ~ UserController ~ updateUser ~ id:', id)
@@ -76,6 +77,7 @@ export class UserController {
    * delete 注意事项：
    * 1. 权限1：判断用户是否有删除权限
    */
+  @Role(['owner', 'maintainer'], 'rewrite')
   deleteUser(@Param('id') id: string): any {
     return this.service.delete(id)
   }

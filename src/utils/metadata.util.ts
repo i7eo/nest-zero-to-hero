@@ -1,10 +1,10 @@
-import { SetMetadata } from '@nestjs/common'
+import { SetMetadata, CustomDecorator } from '@nestjs/common'
 import { isFunction } from 'lodash'
 import 'reflect-metadata'
 
 export const setMetadata = SetMetadata
 
-export const getMetadata = <K = string, V = any>(metadataKey: K, metadataValue: V) => {
+export const getMetadata = <K = string, V = any>(metadataKey: K, metadataValue: V): CustomDecorator<K> => {
   return Reflect.getMetadata(metadataKey, metadataValue)
 }
 
