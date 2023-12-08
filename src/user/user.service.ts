@@ -12,6 +12,7 @@ import { Log } from '../log/log.entity'
 import { IReadUsersDto } from './dto/read-users.dto'
 
 import { User } from './user.entity'
+import * as argon2 from 'argon2'
 
 @Injectable()
 export class UserService {
@@ -51,6 +52,7 @@ export class UserService {
     //   where: In(user.roles),
     // })
     const newUser = this.repository.create({ ...user, roles })
+    newUser.password = await argon2.hash(newUser.password) // 使用 argon2 对密码加密
     return this.repository.save(newUser)
   }
 

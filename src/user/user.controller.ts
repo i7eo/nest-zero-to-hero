@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Inject, LoggerService, Param, Patch, Post, Query, UseFilters, UseGuards } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Inject, LoggerService, Param, Patch, Post, Query, UseFilters, UseGuards, Headers } from '@nestjs/common'
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston'
 
 import { Role } from '@/decorators/role.decorator'
@@ -65,7 +65,8 @@ export class UserController {
    * 3. 返回数据：不能包含敏感信息（密码）
    */
   @Role(['owner', 'maintainer'])
-  updateUser(@Param('id') id: string, @Body() dto: any): any {
+  updateUser(@Headers('Authorization') headers: any, @Param('id') id: string, @Body() dto: any): any {
+    console.log('🚀 ~ file: user.controller.ts:69 ~ UserController ~ updateUser ~ headers:', headers)
     // console.log('🚀 ~ file: user.controller.ts:53 ~ UserController ~ updateUser ~ dto:', dto)
     // console.log('🚀 ~ file: user.controller.ts:53 ~ UserController ~ updateUser ~ id:', id)
     const user = dto as User

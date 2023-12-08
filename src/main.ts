@@ -61,6 +61,14 @@ async function bootstrap() {
     }),
   )
 
+  // app.useGlobalGuards()
+  // 弊端是：如果传入的 guard 中有使用到 service 或 module 中的方法，这样使用是获取不到的。因为这里 DI 读取不到实例
+  // 可以在 app.module 的 providers 中传入：
+  // {
+  //   provide: APP_GUARD,
+  //   useClass: AdminGuard
+  // }
+
   await app.listen(3090, async () => {
     console.log(`:==============================: App is executing, the url is ${await app.getUrl()} :==============================:`)
   })

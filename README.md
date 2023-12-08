@@ -160,6 +160,10 @@ Factory(Person).play()
 
 2. method 上的 role 能否覆盖 class 上的 role？
 
+## Carefull
+
+1. argon2: `pnpm i argon2 --unsafe-perm`，安装 python
+
 ## License
 
 This repository is published under the [MIT](LICENSE) license.

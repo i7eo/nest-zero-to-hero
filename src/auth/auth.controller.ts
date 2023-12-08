@@ -10,18 +10,16 @@ import { AuthUserDto } from './dto/auth-user.dto'
 export class AuthController {
   constructor(private readonly service: AuthService) {}
 
-  @Post('/signin')
+  @Post('signin')
   async signin(@Body() dto: AuthUserDto) {
     const { username, password } = dto
-    console.log('signin start')
     const token = await this.service.signin(username, password)
-    console.log('signin end')
     return {
       access_token: token,
     }
   }
 
-  @Post('/signup')
+  @Post('signup')
   signup(@Body() dto: AuthUserDto) {
     const { username, password } = dto
     // if (!username || !password) {
