@@ -1,6 +1,10 @@
-import { Body, Controller, /* HttpException, */ Post, UseFilters } from '@nestjs/common'
+import { Body, Controller, /* HttpException, */ Post, UseFilters, UseInterceptors } from '@nestjs/common'
 
 import { TypeormExceptionFilter } from '@/filters/typeorm-exception.filter'
+
+import { DesensitizeInterceptor } from '@/interceptors/desensitize.interceptor'
+
+import { CreateUserPipe } from '@/user/pipe/create-user/create-user.pipe'
 
 import { AuthService } from './auth.service'
 import { AuthUserDto } from './dto/auth-user.dto'
@@ -20,12 +24,13 @@ export class AuthController {
   }
 
   @Post('signup')
-  signup(@Body() dto: AuthUserDto) {
-    const { username, password } = dto
+  @UseInterceptors(DesensitizeInterceptor)
+  signup(@Body(CreateUserPipe) dto: AuthUserDto) {
+    // const { username, password } = dto
     // if (!username || !password) {
     //   throw new HttpException('username or password is empty', 400)
     // }
     // TODO: 与前端共用正则校验
-    return this.service.signup(username, password)
+    return this.service.signup(dto)
   }
 }

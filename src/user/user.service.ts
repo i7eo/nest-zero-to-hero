@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import * as argon2 from 'argon2'
 import { Repository } from 'typeorm'
 
 // import { DEFAULT_ROLE_VALUE } from '@/role/constants'
@@ -12,7 +13,6 @@ import { Log } from '../log/log.entity'
 import { IReadUsersDto } from './dto/read-users.dto'
 
 import { User } from './user.entity'
-import * as argon2 from 'argon2'
 
 @Injectable()
 export class UserService {

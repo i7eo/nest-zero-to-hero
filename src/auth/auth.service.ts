@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt'
 
 import * as argon2 from 'argon2'
 
+import { User } from '@/user/user.entity'
 import { UserService } from '@/user/user.service'
 
 @Injectable()
@@ -48,17 +49,14 @@ export class AuthService {
     // throw new UnauthorizedException()
   }
 
-  async signup(username: string, password: string) {
-    const user = await this.userService.readOne(username)
-    if (user) {
+  async signup(user: Partial<User>) {
+    const existUser = await this.userService.readOne(user.username)
+    if (existUser) {
       throw new ConflictException('用户已存在，请登录')
       // throw new ForbiddenException('用户已存在，请登录')
     }
 
-    const newUser = await this.userService.create({
-      username,
-      password,
-    })
+    const newUser = await this.userService.create(user)
     return newUser
   }
 }
