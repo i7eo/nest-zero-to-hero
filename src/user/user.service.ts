@@ -42,6 +42,7 @@ export class UserService {
     // )
 
     const roles = await Promise.all(
+      // TODO: 这里不接收完成的 role 而只是 role value 是否合适？
       (user.roles as unknown as Role['value'][]).map(async (value) => {
         return this.roleRepository.findOne({ where: { value } })
       }),
