@@ -1,4 +1,6 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm'
+import { Column, CreateDateColumn, Entity, OneToOne, PrimaryColumn } from 'typeorm'
+
+import { Profile } from '@/user/profile.entity'
 
 export enum GenderEnum {
   female = '0',
@@ -38,7 +40,7 @@ export class Gender {
   updatedAt: Date
 
   // 字典表不需要外键
-  // @OneToOne(() => Profile, (profile) => profile.gender)
+  @OneToOne(() => Profile, (profile) => profile.gender)
   // @JoinColumn()
-  // profile: Profile
+  profile: Profile
 }

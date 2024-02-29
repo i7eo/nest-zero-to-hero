@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, Length } from 'class-validator'
 
-import { Role } from '@/role/role.entity'
+import { RoleEnumValue } from '@/role/role.entity'
 
 export class CreateUserDto {
   @IsString()
@@ -27,5 +27,5 @@ export class CreateUserDto {
   })
   password: string
 
-  roles?: Role[] | string[]
+  roles?: RoleEnumValue[]
 }

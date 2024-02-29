@@ -6,7 +6,7 @@ import { TypeormExceptionFilter } from '@/filters/typeorm-exception.filter'
 import { Role, RoleEnumValue } from './role.entity'
 import { RoleService } from './role.service'
 
-@Controller('dict/roles')
+@Controller('roles')
 @UseFilters(TypeormExceptionFilter)
 export class RoleController {
   constructor(

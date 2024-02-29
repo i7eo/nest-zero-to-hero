@@ -5,11 +5,13 @@ import { Repository } from 'typeorm'
 
 // import { DEFAULT_ROLE_VALUE } from '@/role/constants'
 
+import { Gender } from '@/gender/gender.entity'
 import { Role } from '@/role/role.entity'
 import { createQBCondition } from '@/utils/db.utils'
 
 import { Log } from '../log/log.entity'
 
+import { CreateUserDto } from './dto/create-user.dto'
 import { IReadUsersDto } from './dto/read-users.dto'
 
 import { User } from './user.entity'
@@ -18,11 +20,12 @@ import { User } from './user.entity'
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly repository: Repository<User>,
+    @InjectRepository(Gender) private readonly genderRepository: Repository<Gender>,
     @InjectRepository(Role) private readonly roleRepository: Repository<Role>,
     @InjectRepository(Log) private readonly logRepository: Repository<Log>,
   ) {}
 
-  async create(user: Partial<User>) {
+  async create(user: Partial<Omit<User, 'roles'>> & Pick<CreateUserDto, 'roles'>) {
     // console.log('🚀 ~ file: user.service.ts:21 ~ UserService ~ create ~ user:', user)
 
     // // 如果系统简单不想做数据字典的话，user 关联的 gender 与 roles 可以按如下方式处理：
@@ -42,8 +45,7 @@ export class UserService {
     // )
 
     const roles = await Promise.all(
-      // TODO: 这里不接收完成的 role 而只是 role value 是否合适？
-      (user.roles as unknown as Role['value'][]).map(async (value) => {
+      user.roles.map(async (value) => {
         return this.roleRepository.findOne({ where: { value } })
       }),
     )
@@ -57,7 +59,7 @@ export class UserService {
     return this.repository.save(newUser)
   }
 
-  read(query: IReadUsersDto) {
+  async read(query: IReadUsersDto) {
     const { limit = 10, page = 1, username, gender, role } = query
     // SELECT * FROM user u, profile p, role r WHERE u.id = p.uid AND u.id = r.uid AND ...
     // SELECT * FROM user u LEFT JOIN profile p ON u.id = p.uid LEFT JOIN role r ON u.id = r.uid WHERE ...
@@ -86,7 +88,7 @@ export class UserService {
     // })
 
     // getRawMany 扁平化嵌套结构
-    const qb = this.repository.createQueryBuilder('user').leftJoinAndSelect('user.profile', 'profile').leftJoinAndSelect('user.roles', 'roles')
+    const qb = this.repository.createQueryBuilder('user').leftJoinAndSelect('user.profile', 'profile').leftJoinAndSelect('profile.gender', 'gender').leftJoinAndSelect('user.roles', 'roles')
 
     // if (username) {
     //   qb.where('user.username = :username', { username })
@@ -107,10 +109,17 @@ export class UserService {
     //   qb.andWhere('roles.id IS NOT NULL')
     // }
 
+    let genderValue = ''
+    if (gender) {
+      const genderResult = await this.genderRepository.findOne({ where: { value: gender } })
+      genderValue = genderResult.value
+    }
+
     // 避免 if/if 多重判断
     const newQB = createQBCondition<User>(qb, {
       'user.username': username,
-      'profile.gender': gender,
+      // 'profile.gender': gender,
+      'gender.value': genderValue,
       'roles.value': role,
     })
 

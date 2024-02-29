@@ -32,7 +32,7 @@ export class UserController {
   @Post()
   @Role(['owner', 'maintainer'])
   createUser(@Body(CreateUserPipe) dto: CreateUserDto): any {
-    const user = dto as User
+    const user = dto
     return this.service.create(user)
   }
 

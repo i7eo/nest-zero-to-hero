@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt'
 
 import * as argon2 from 'argon2'
 
+import { CreateUserDto } from '@/user/dto/create-user.dto'
 import { User } from '@/user/user.entity'
 import { UserService } from '@/user/user.service'
 
@@ -49,7 +50,7 @@ export class AuthService {
     // throw new UnauthorizedException()
   }
 
-  async signup(user: Partial<User>) {
+  async signup(user: Partial<Omit<User, 'roles'>> & Pick<CreateUserDto, 'roles'>) {
     const existUser = await this.userService.readOne(user.username)
     if (existUser) {
       throw new ConflictException('用户已存在，请登录')

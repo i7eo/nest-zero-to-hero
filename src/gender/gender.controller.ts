@@ -6,7 +6,7 @@ import { TypeormExceptionFilter } from '@/filters/typeorm-exception.filter'
 import { Gender, GenderEnumValue } from './gender.entity'
 import { GenderService } from './gender.service'
 
-@Controller('dict/genders')
+@Controller('genders')
 @UseFilters(TypeormExceptionFilter)
 export class GenderController {
   constructor(

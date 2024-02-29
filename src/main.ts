@@ -6,7 +6,7 @@ import { /* utilities, WinstonModule, */ WINSTON_MODULE_NEST_PROVIDER } from 'ne
 
 import { AppModule } from './app.module'
 import { AllExceptionFilter } from './filters/all-exception.filter'
-// import { AllExceptionFilter } from './filters/all-exception.filter'
+import { ResponseInterceptor } from './interceptors/response.interceptor'
 
 async function bootstrap() {
   // 移动至 log module
@@ -68,6 +68,8 @@ async function bootstrap() {
   //   provide: APP_GUARD,
   //   useClass: AdminGuard
   // }
+
+  app.useGlobalInterceptors(new ResponseInterceptor())
 
   await app.listen(3090, async () => {
     console.log(`:==============================: App is executing, the url is ${await app.getUrl()} :==============================:`)
