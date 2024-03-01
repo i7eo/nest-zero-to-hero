@@ -164,6 +164,18 @@ Factory(Person).play()
 
 1. argon2: `pnpm i argon2 --unsafe-perm`，安装 python
 
+## Docker mirror
+
+see <https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors>
+
+mysql access denied solved:
+
+```bash
+docker-compose down -v
+
+docker-compose up -d 
+```
+
 ## License
 
 This repository is published under the [MIT](LICENSE) license.
