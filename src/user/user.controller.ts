@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Inject, LoggerService, Param, Patch, Post, Query, UseFilters, UseGuards, Headers } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Inject, LoggerService, Param, Post, Query, UseFilters, UseGuards, Headers, Put } from '@nestjs/common'
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston'
 
 import { Role } from '@/decorators/role.decorator'
@@ -57,7 +57,7 @@ export class UserController {
     return 'hello world'
   }
 
-  @Patch(':id')
+  @Put(':id')
   /**
    * update 注意事项：
    * 1. 权限1：判断用户是否为自己

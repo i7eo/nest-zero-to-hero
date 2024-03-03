@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Inject, LoggerService, Param, Patch, Post, Query, UseFilters } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Inject, LoggerService, Param, Post, Put, Query, UseFilters } from '@nestjs/common'
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston'
 
 import { TypeormExceptionFilter } from '@/filters/typeorm-exception.filter'
@@ -32,7 +32,7 @@ export class GenderController {
     return this.service.readOne(value)
   }
 
-  @Patch(':value')
+  @Put(':value')
   updateGender(@Param('value') value: GenderEnumValue, @Body() dto: any): any {
     const gender = dto as Gender
     return this.service.update(value, gender)
