@@ -37,6 +37,6 @@ export const typeromMysqlOptions = createOptions()
 // 给 typeorm cli 做 migration 用
 export default new DataSource({
   ...typeromMysqlOptions,
-  migrations: ['./migration/**'],
+  migrations: ['./src/migration/**'],
   subscribers: [],
 } as DataSourceOptions)

@@ -1,5 +1,7 @@
 import { Column, CreateDateColumn, Entity, ManyToMany, PrimaryColumn } from 'typeorm'
 
+import { Menu } from '@/menus/menu.entity'
+
 import { User } from '../user/user.entity'
 
 export enum RoleEnum {
@@ -44,4 +46,7 @@ export class Role {
 
   @ManyToMany(() => User, (user) => user.roles)
   users: User[]
+
+  @ManyToMany(() => Menu, (menu) => menu.role)
+  menu: Menu
 }
